@@ -18,7 +18,7 @@ def getRepos(user):
     repos = json.loads(response.text)
     repoNames = []
     commits = 0
-    if repos is not None:
+    if repos is not None and "message" not in repos:
         for item in repos:
             repoName = item["name"]
             commits = getCommits(repoName, user)
@@ -40,6 +40,3 @@ def getCommits(repoName, user):
         return len(commits)
     else:
         return 0
-
-
-getCommits("hellogitworld", "richkempinski")
