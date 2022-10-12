@@ -1,8 +1,12 @@
 language: python
 python:
- - "3.5"
+    - '3.5'
 
 # command to run tests
 script:
- - cd Triangle567
- - python -m unittest TestTriangle
+    - cd Triangle567
+    - python -m unittest TestTriangle
+    - cd ../
+    - cd GitHubApi567-hw4a
+    - python -m pip install requests
+    - python -m unittest testGitHubApi
