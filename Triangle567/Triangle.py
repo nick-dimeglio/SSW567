@@ -13,10 +13,10 @@ The primary goal of this file is to demonstrate a simple python program to class
 import heapq
 
 
-def classifyTriangle(a, b, c):
+def classify_triangle(side_one, side_two, side_three):
     """
-    Your correct code goes here...  Fix the faulty logic below until the code passes all of 
-    you test cases. 
+    Your correct code goes here...  Fix the faulty logic below until the code passes all of
+    you test cases.
 
     This function returns a string with the type of triangle from three integer values
     corresponding to the lengths of the three sides of the Triangle.
@@ -33,17 +33,17 @@ def classifyTriangle(a, b, c):
 
     # verify that all 3 inputs are integers
     # Python's "isinstance(object,type) returns True if the object is of the specified type
-    if not(isinstance(a, int) and isinstance(b, int) and isinstance(c, int)):
+    if not(isinstance(side_one, int) and isinstance(side_two, int) and isinstance(side_three, int)):
         return 'InvalidInput'
 
     # ERROR: originally placed before check for valid integer inputs, potentially breakable code.
     # require that the input values be >= 0 and <= 200
-    if a > 200 or b > 200 or c > 200:
+    if side_one > 200 or side_two > 200 or side_three > 200:
         return 'InvalidInput'
 
     # error found where b was set to check for b<=b rather than b<= 0
 
-    if a < 0 or b < 0 or c < 0:
+    if side_one < 0 or side_two < 0 or side_three < 0:
         return 'InvalidInput'
 
     # This information was not in the requirements spec but
@@ -51,28 +51,29 @@ def classifyTriangle(a, b, c):
     # the sum of any two sides must be strictly less than the third side
     # of the specified shape is not a triangle
     # ERROR:found here where differences wer being checked rather than sums
-    if (a >= (b + c)) or (b >= (a + c)) or (c >= (a + b)):
+    if ((side_one >= (side_two + side_three)) or
+            (side_two >= (side_one + side_three)) or
+            (side_three >= (side_one + side_two))):
         return 'NotATriangle'
 
     # now we know that we have a valid triangle
 
     # ADDED: code to order a,b, and c into smallest to largest respectively via heapification.
     # This is done to ensure that the correct side is being checked for the right angle.
-    # It is also time efficient as heapification and sorting will only take O(n) rather than O(nlogn) time.
+    # It is also time efficient as heapification and sorting will only take O(n) time.
     # However, it is a bit redundant because there is a strict 3 side triangle requirement.
     # Still doing it out of good practice.
-    sides = [a, b, c]
+    sides = [side_one, side_two, side_three]
     heapq.heapify(sides)
-    a = heapq.heappop(sides)
-    b = heapq.heappop(sides)
-    c = heapq.heappop(sides)
+    side_one = heapq.heappop(sides)
+    side_two = heapq.heappop(sides)
+    side_three = heapq.heappop(sides)
     # ERROR: found here, not checking other cases for equilateral
-    if a == b and c == a and b == c:
+    if side_one == side_two and side_three == side_one and side_two == side_three:
         return 'Equilateral'
     # ERROR: found here, multiplying not using exponent.
-    elif ((a ** 2) + (b ** 2)) == (c ** 2):
+    if ((side_one ** 2) + (side_two ** 2)) == (side_three ** 2):
         return 'Right'
-    elif (a != b) and (b != c) and (a != b):
+    if (side_one != side_two) and (side_two != side_three) and (side_one != side_two):
         return 'Scalene'
-    else:
-        return 'Isoceles'
+    return 'Isoceles'
