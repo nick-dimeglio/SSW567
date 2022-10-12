@@ -1,24 +1,49 @@
 # start unittest
 
 import unittest
-import GitHubApi
+from unittest import mock
+import requests
+#import mockrequest
+
+
+# import gitmain class from githubapi.py
+
+from GitHubApi import getCommits, getRepos
+
+
+class MockResponse:
+    def __init__(self, json_data, status_code):
+        self.text = json_data
+        self.status_code = status_code
+
+    def json(self):
+        return self.json_data
 
 
 class TestGitHubApi(unittest.TestCase):
-    def testGetCommits(self):
-        self.assertEqual(GitHubApi.getCommits(
-            "hellogitworld", "richkempinski"), 30)
+    # Test the getcommits function with mocks
 
-    def testGetCommitsFail(self):
-        self.assertEqual(GitHubApi.getCommits(
-            "hellogitworldzz", "richkempinski"), 0)
+    @mock.patch('requests.get')
+    def testGetCommits(self, mocked_req):
+        mocked_req.return_value = MockResponse(
+            '[{"comdmit": 1}, {"commitd": 1}, {"commit": 2}]', 200)
+        response = getCommits("hellogitworld", "richkempinski")
+
+        self.assertEqual(response, 3)
+
+    @mock.patch('requests.get')
+    def testGetCommitsFail(self, mocked_reqs):
+        mocked_reqs.return_value = MockResponse(
+            '[]', 404)
+        response = getCommits("hellogitworlddasdasd", "richkempinski")
+        self.assertEqual(response, 0)
 
     def testGetRepos(self):
-        self.assertEqual(GitHubApi.getRepos("nickd"),
+        self.assertEqual(getRepos("nickd"),
                          [['searchlogic', 30]])
 
     def testGetReposFail(self):
-        self.assertEqual(GitHubApi.getRepos("nickdzzdsadadd"), None)
+        self.assertEqual(getRepos("nickdzzdsadadd"), None)
 
 
 if __name__ == '__main__':

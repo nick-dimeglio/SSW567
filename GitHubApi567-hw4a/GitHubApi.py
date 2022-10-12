@@ -8,7 +8,8 @@ def main():
     repos = getRepos(user)
     if repos is not None:
         for item in repos:
-            print("Repo: " + item[0] + " Number of commits: " + str(item[1]))
+            print("Repo: " + item[0] +
+                  " Number of commits: " + str(item[1]))
 
 
 def getRepos(user):
